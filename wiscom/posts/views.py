@@ -9,6 +9,16 @@ from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
 import socket
 
+from django.http import HttpRequest
+
+def get_client_ip(request: HttpRequest) -> str:
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip_list = x_forwarded_for.split(',')
+        return ip_list[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+
 # 소통해요 글 리스트 보기, 소통해요 글 생성하기, 글 상세보기, 수정하기, 삭제하기
 class PostModelViewSet(ModelViewSet):
     queryset=Post.objects.all()
@@ -71,10 +81,10 @@ class CommentModelViewSet(ModelViewSet):
 class PostLikeAPIView(GenericAPIView):
     def get(self, request, post_id, *args, **kwargs):
         post = Post.objects.get(id=post_id)
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip=s.getsockname()[0]
-        print(s.getsockname()[0])
+        
+        ip = get_client_ip(request)
+        print(ip)
+
 
 
         # 해당 게시물에 대한 좋아요가 이미 있는지 확인
