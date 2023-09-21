@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Like,Comment, Tag
+from .models import Post, Like,Comment, Tag, CommentTag
 
 
 class CommentInline(admin.TabularInline):
@@ -21,3 +21,5 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 admin.site.register(Like)
+
+admin.site.register(CommentTag)
