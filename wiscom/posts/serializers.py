@@ -30,9 +30,10 @@ class CommentListSerializer(serializers.ModelSerializer):
 class PostRetreiveSerializer(serializers.ModelSerializer):
     tags = serializers.StringRelatedField(many=True)
     comments = CommentListSerializer(many=True, read_only=True)
+    likes = serializers.IntegerField()
     class Meta:
         model=Post
-        fields=['id','title','content','comments','tags']
+        fields=['id','title','content','comments','tags', 'likes']
 
 
 from collections import Counter
