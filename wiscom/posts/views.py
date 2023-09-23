@@ -6,7 +6,7 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend 
 from django.http import HttpRequest
 from .serializers import PostListSerializer, PostCreateSerializer, CommentListSerializer, PostRetreiveSerializer, CommentCreateUpdateSerializer
-from .models import Post,Comment, Like
+from .models import Post,Comment, Like, Tag
 
 def get_client_ip(request: HttpRequest) -> str:
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -36,6 +36,7 @@ class PostModelViewSet(ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
+
 class CommentModelViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     
@@ -54,6 +55,22 @@ class CommentModelViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['post'] = post_pk  # 게시물의 ID를 post 필드에 저장
 
+        comment_tags = serializer.validated_data.get('comment_tags', [])  # 시리얼라이저를 통해 들어온 comment_tag의 리스트를 가져옴 
+
+        existing_hashtags = []
+        for comment in post_pk.comments.all():  # 모든 댓글 반복 
+            for tags in comment.comment_tags.all():  # 각각의 댓글에 달린 태그 
+                existing_hashtags.append(tags) # 태그리스트에 추가  
+
+        total_tags = comment_tags+existing_hashtags
+        set_total_tags = set(total_tags)
+
+        for hashtag in set_total_tags:
+            hashtag_count = total_tags.count(hashtag)
+            if hashtag_count >= 3:
+                hashtag_object, created = Tag.objects.get_or_create(name=hashtag)  # 태그의 객체를 생성한 후 넣어야 한다 
+                post_pk.tags.add(hashtag_object)
+            
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
