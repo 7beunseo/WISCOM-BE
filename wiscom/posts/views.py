@@ -30,28 +30,7 @@ class PostModelViewSet(ModelViewSet):
             return PostRetreiveSerializer
         else:
             return PostCreateSerializer
-    
 
-    def retrieve(self, request, *args, **kwargs):
-        post_id = self.kwargs.get('pk')
-        liked_key = 'liked_post_{}'.format(post_id)
-
-        if request.session.get(liked_key, False):
-            return Response({"message": "이미 좋아요를 눌렀습니다."}, status=200)
-
-        try:
-            post = self.get_object()
-        except Post.DoesNotExist:
-            return Response({"error": "해당하는 게시물이 존재하지 않습니다."}, status=400)
-
-        request.session[liked_key] = True
-
-        Like.objects.create(post=post, ip=request.META.get('REMOTE_ADDR'))
-        post.likes += 1
-        post.save()
-
-        serializer = self.get_serializer(post)
-        return Response(serializer.data)
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -100,28 +79,24 @@ class CommentModelViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         
-# class PostLikeAPIView(GenericAPIView):
-#     def get(self, request, post_id, *args, **kwargs):
-#         post = Post.objects.get(id=post_id)
-        
-#         ip = get_client_ip(request)
-#         print(ip)
+class PostLikeAPIView(GenericAPIView):
+    queryset = Post.objects.all()
+    lookup_field = 'id'  # 'id'로 변경합니다
 
-#         # 해당 게시물에 대한 좋아요가 이미 있는지 확인
-#         existing_like = Like.objects.filter(post=post, ip=ip)
+    def get(self, request, id, *args, **kwargs):
+        liked_key = 'liked_post_{}'.format(id)
 
-#         if existing_like:
-#             # 이미 좋아요를 눌렀으면 아무 작업도 하지 않음
-#             response_data = {
-#                         'message': '이미 좋아요를 눌렀습니다.'
-#                     }
-#         else:
-#             # 좋아요를 생성하고 게시물의 좋아요 수를 증가
-#             Like.objects.create(post=post, ip=ip)
-#             post.likes += 1
-#             post.save()
-#             response_data = {
-#                         'message': '좋아요가 추가되었습니다.'
-#                     }
-            
-#         return Response(response_data)
+        if request.session.get(liked_key, False):
+            return Response({"message": "이미 좋아요를 눌렀습니다."}, status=200)
+
+        try:
+            post = self.get_object()
+        except Post.DoesNotExist:
+            return Response({"error": "해당하는 게시물이 존재하지 않습니다."}, status=400)
+
+        request.session[liked_key] = True
+
+        Like.objects.create(post=post, ip=request.META.get('REMOTE_ADDR'))
+        post.likes += 1
+        post.save()
+        return Response({"error": "좋아요가 눌렸습니다."}, status=400)
