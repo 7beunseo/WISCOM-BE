@@ -33,3 +33,6 @@ class Comment(models.Model):
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     ip = models.GenericIPAddressField('IP')
+
+    def __str__(self):
+        return f'Like for Post {self.post.id} from {self.ip}'
