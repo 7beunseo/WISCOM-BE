@@ -29,6 +29,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField('CREATED_AT', auto_now_add=True)
 
 
+
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     ip = models.GenericIPAddressField('IP')

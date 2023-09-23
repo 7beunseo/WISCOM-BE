@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment
+from .models import Post, Comment, CommentTag
 
 class TagSerializer(serializers.StringRelatedField):
     def to_representation(self, value):
@@ -34,7 +34,12 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
         model=Post
         fields=['id','title','content','comments','tags']
 
+
+from collections import Counter
 class CommentCreateUpdateSerializer(serializers.ModelSerializer):
+    comment_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=CommentTag.objects.all())
+
     class Meta:
-        model=Comment
-        fields=['content','comment_tags']
+        model = Comment
+        fields = ['content', 'comment_tags']
+
