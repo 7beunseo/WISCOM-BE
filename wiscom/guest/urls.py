@@ -9,6 +9,6 @@ router.register(r'guests', views.GuestViewSet)
 
 urlpatterns = [
     # path('guests/', GuesctListCreateView.as_view(), name='guests-list-create'),
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 
 ]
