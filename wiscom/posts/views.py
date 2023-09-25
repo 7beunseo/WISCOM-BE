@@ -7,8 +7,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http import HttpRequest
 from .serializers import PostListSerializer, PostCreateSerializer, CommentListSerializer, PostRetreiveSerializer, CommentCreateUpdateSerializer
 from .models import Post,Comment, Like, Tag
-from rest_framework.decorators import api_view
-from django.contrib.sessions.models import Session
 
 def get_client_ip(request: HttpRequest) -> str:
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -30,8 +28,13 @@ class PostModelViewSet(ModelViewSet):
             return PostRetreiveSerializer
         else:
             return PostCreateSerializer
-
-    
+        
+    def list(self, request):
+        posts = Post.objects.all()
+        serializer = PostListSerializer(posts, many=True)
+        data = serializer.data
+        return Response(data)
+        
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -48,12 +51,12 @@ class CommentModelViewSet(ModelViewSet):
             return CommentListSerializer
         else:
             return CommentCreateUpdateSerializer
+        
     def list(self, request, *args, **kwargs):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def create(self, request,post_pk, *args, **kwargs):
         post_pk = Post.objects.get(id=post_pk)
-        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['post'] = post_pk  # 게시물의 ID를 post 필드에 저장
@@ -71,7 +74,7 @@ class CommentModelViewSet(ModelViewSet):
         for hashtag in set_total_tags:
             hashtag_count = total_tags.count(hashtag)
             if hashtag_count >= 3:
-                hashtag_object, created = Tag.objects.get_or_create(name=hashtag)  # 태그의 객체를 생성한 후 넣어야 한다 
+                hashtag_object, created = Tag.objects.get_or_create(name=hashtag, category='comments')  # 태그의 객체를 생성한 후 넣어야 한다 
                 post_pk.tags.add(hashtag_object)
             
         self.perform_create(serializer)
@@ -81,7 +84,7 @@ class CommentModelViewSet(ModelViewSet):
         
 class PostLikeAPIView(GenericAPIView):
     queryset = Post.objects.all()
-    lookup_field = 'id'  # 'id'로 변경합니다
+    lookup_field = 'id' 
 
     def get(self, request, id, *args, **kwargs):
         liked_key = 'liked_post_{}'.format(id)
@@ -99,4 +102,4 @@ class PostLikeAPIView(GenericAPIView):
         Like.objects.create(post=post, ip=request.META.get('REMOTE_ADDR'))
         post.likes += 1
         post.save()
-        return Response({"error": "좋아요가 눌렸습니다."}, status=400)
+        return Response({"message": "좋아요가 추가되었습니다."}, status=400)
