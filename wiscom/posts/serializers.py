@@ -7,7 +7,7 @@ class PostListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'likes', 'tags']
+        fields = ['id', 'title','team', 'likes', 'tags']
     
     def get_tags(self, instance):
         posts = instance.tags.filter(category='posts')
@@ -38,10 +38,16 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
     comments = CommentListSerializer(many=True, read_only=True)
     likes = serializers.IntegerField()
+    images = serializers.SerializerMethodField()
 
     class Meta:
         model=Post
-        fields=['id','title','content','comments','tags', 'likes']
+        fields=['id','title','team','images','content','comments','tags','likes']
+
+    def get_images(self, post):
+        photos_queryset = post.post_image.all()
+        photos_urls = [photo.image.url for photo in photos_queryset]
+        return photos_urls
 
     def get_tags(self, instance):
         posts = instance.tags.filter(category='posts')
