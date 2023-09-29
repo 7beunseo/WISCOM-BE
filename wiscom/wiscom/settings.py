@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django_filters',
     'posts',
     'guest',
-
+    'developers',
     'corsheaders',
 ]
 

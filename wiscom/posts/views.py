@@ -20,6 +20,11 @@ class PostModelViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['tags']
     search_fields = ['title']
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'id': self.kwargs.get('pk')})  # 'id'를 컨텍스트에 추가합니다.
+        return context
 
     def get_serializer_class(self):
         if self.action=='list':
