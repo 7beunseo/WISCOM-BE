@@ -5,6 +5,10 @@ import os
 def post_image_upload_path(instance, filename):
     return f'post_{instance.post.id}/{filename}'
 
+def post_logo_upload_path(instance, filename):
+    # 이미지 파일을 'logo' 폴더에 저장
+    return f'logo/{filename}'
+
 class Tag(models.Model):
     CATEGORY={
         ('posts','posts'),
@@ -33,10 +37,12 @@ class Post(models.Model):
     # 개발자 이름, 개발자 사진
     developers = models.ManyToManyField(Developer, related_name='posts', blank=True)
     #developers = models.ForeignKey(Developer, on_delete=models.CASCADE)
-    
+
     # 로고 여부?
+    logo = models.ImageField('LOGO', upload_to=post_logo_upload_path)
     # 서비스 url 여부?
-    
+    service_url = models.URLField('SERVICE_URL', max_length=200)
+
     def __str__(self):
         return self.title
 
