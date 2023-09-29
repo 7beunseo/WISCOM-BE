@@ -1,5 +1,4 @@
 from django.db import models
-from developers.models import Developer
 import os
 
 def post_image_upload_path(instance, filename):
@@ -34,6 +33,7 @@ class Post(models.Model):
     team = models.CharField('TEAM', max_length=50)
     content = models.TextField('CONTENT')
     likes = models.IntegerField('LIKE', default=0)
+<<<<<<< HEAD
     # 개발자 이름, 개발자 사진
     developers = models.ManyToManyField(Developer, related_name='posts', blank=True)
     #developers = models.ForeignKey(Developer, on_delete=models.CASCADE)
@@ -43,6 +43,10 @@ class Post(models.Model):
     # 서비스 url 여부?
     service_url = models.URLField('SERVICE_URL', max_length=200)
 
+=======
+
+    
+>>>>>>> 5f55f5e590d7deb55fbc4723e3e5e49ee5592cf7
     def __str__(self):
         return self.title
 
