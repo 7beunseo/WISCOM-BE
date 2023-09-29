@@ -4,10 +4,6 @@ import os
 def post_image_upload_path(instance, filename):
     return f'post_{instance.post.id}/{filename}'
 
-def post_logo_upload_path(instance, filename):
-    # 이미지 파일을 'logo' 폴더에 저장
-    return f'logo/{filename}'
-
 class Tag(models.Model):
     CATEGORY={
         ('posts','posts'),
@@ -33,7 +29,7 @@ class Post(models.Model):
     team = models.CharField('TEAM', max_length=50)
     content = models.TextField('CONTENT')
     likes = models.IntegerField('LIKE', default=0)
-    logo = models.ImageField('LOGO', upload_to=post_logo_upload_path)
+    logo = models.ImageField('LOGO', upload_to='logo')
     service_url = models.URLField('SERVICE_URL', max_length=200)
 
     def __str__(self):
