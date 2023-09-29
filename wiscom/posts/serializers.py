@@ -41,27 +41,14 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
     comments = CommentListSerializer(many=True, read_only=True)
     likes = serializers.IntegerField()
     images = serializers.SerializerMethodField()
-
-    logo = serializers.SerializerMethodField()
-    service_url = serializers.URLField()
-
     developer = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'team', 'images', 'content', 'comments', 'tags', 'likes', 'logo', 'service_url', 'developer']
 
-<<<<<<< HEAD
-    # def get_queryset(self):
-    #     number = self.context.get('id')  # 컨텍스트에서 'id' 값을 가져옵니다.
-    #     return Post.objects.filter(id=number)  # 'id'로 필터링합니다.
-
-    def get_developer(self, instance):
-        # 'post_number'가 'id'와 일치하는 개발자를 필터링합니다.
-=======
     def get_developer(self, post):
->>>>>>> 5f55f5e590d7deb55fbc4723e3e5e49ee5592cf7
-        number = self.instance.id
+        number = post.id
         developers = Developer.objects.filter(post_number=number)
         return DeveloperSerializer(developers, many=True).data
 
@@ -75,11 +62,6 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
         comments = instance.tags.filter(category='comments')
         return {"posts": posts.values_list('name', flat=True), "comments": comments.values_list('name', flat=True)}
 
-    def get_logo(self, instance):
-        if instance.logo:
-            return settings.MEDIA_URL + str(instance.logo)
-        else:
-            return None
 
 class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
@@ -92,4 +74,3 @@ class CommentCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['post_number', 'content', 'comment_tags']
-
