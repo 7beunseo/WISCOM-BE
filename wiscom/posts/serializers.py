@@ -1,10 +1,12 @@
+from django.conf import settings
 from rest_framework import serializers
 from .models import Post, Comment, CommentTag
+from developers.models import Developer
 
 
 class PostListSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Post
         fields = ['id', 'title','team', 'likes', 'tags']
@@ -39,10 +41,16 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
     comments = CommentListSerializer(many=True, read_only=True)
     likes = serializers.IntegerField()
     images = serializers.SerializerMethodField()
+    developer = serializers.SerializerMethodField()
 
     class Meta:
-        model=Post
-        fields=['id','title','team','images','content','comments','tags','likes']
+        model = Post
+        fields = ['id', 'title', 'team', 'images', 'content', 'comments', 'tags', 'likes', 'logo', 'service_url', 'developer']
+
+    def get_developer(self, post):
+        number = post.id
+        developers = Developer.objects.filter(post_number=number)
+        return DeveloperSerializer(developers, many=True).data
 
     def get_images(self, post):
         photos_queryset = post.post_image.all()
@@ -55,10 +63,14 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
         return {"posts": posts.values_list('name', flat=True), "comments": comments.values_list('name', flat=True)}
 
 
+class DeveloperSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Developer
+        fields = ['name', 'image']
+
 class CommentCreateUpdateSerializer(serializers.ModelSerializer):
     comment_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=CommentTag.objects.all())
 
     class Meta:
         model = Comment
-        fields = ['content', 'comment_tags']
-
+        fields = ['post_number', 'content', 'comment_tags']

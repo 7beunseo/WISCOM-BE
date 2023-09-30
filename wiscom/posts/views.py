@@ -20,6 +20,11 @@ class PostModelViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['tags']
     search_fields = ['title']
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'id': self.kwargs.get('pk')})  # 'id'를 컨텍스트에 추가합니다.
+        return context
 
     def get_serializer_class(self):
         if self.action=='list':
@@ -29,18 +34,12 @@ class PostModelViewSet(ModelViewSet):
         else:
             return PostCreateSerializer
         
-    def list(self, request):
-        posts = Post.objects.all()
-        serializer = PostListSerializer(posts, many=True)
-        data = serializer.data
-        return Response(data)
-        
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    def get_serializer_context(self):
+        return {
+            'request': None, #None으로 수정 
+            'format': self.format_kwarg,
+            'view': self
+        }
     
 
 class CommentModelViewSet(ModelViewSet):

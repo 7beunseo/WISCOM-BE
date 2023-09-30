@@ -29,8 +29,8 @@ class Post(models.Model):
     team = models.CharField('TEAM', max_length=50)
     content = models.TextField('CONTENT')
     likes = models.IntegerField('LIKE', default=0)
-    # 로고 여부?
-    # 서비스 url 여부?
+    logo = models.ImageField('LOGO', upload_to='logo')
+    service_url = models.URLField('SERVICE_URL', max_length=200)
 
     def __str__(self):
         return self.title
