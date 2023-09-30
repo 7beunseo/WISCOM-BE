@@ -16,6 +16,7 @@ def get_client_ip(request: HttpRequest) -> str:
     return request.META.get('REMOTE_ADDR')
 
 class PostModelViewSet(ModelViewSet):
+    pagination_class=None
     queryset=Post.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['tags']

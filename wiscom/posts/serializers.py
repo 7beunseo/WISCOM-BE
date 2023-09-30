@@ -9,7 +9,7 @@ class PostListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title','team', 'likes', 'tags']
+        fields = ['id', 'logo', 'title','team', 'likes', 'tags']
     
     def get_tags(self, instance):
         posts = instance.tags.filter(category='posts')
