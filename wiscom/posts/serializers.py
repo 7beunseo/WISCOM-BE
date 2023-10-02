@@ -73,4 +73,4 @@ class CommentCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['post_number', 'content', 'comment_tags']
+        fields = ['content', 'comment_tags']
