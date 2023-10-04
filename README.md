@@ -9,7 +9,7 @@
 
 | <center> 김은서  </center> | <center>김희원 </center> | <center>박소이</center> | 
 | --- | --- | --- |
-| <center> <img width="150px" src="https://avatars.githubusercontent.com/u/128278212?v=4" /></center> | <center><img width="150px" src="https://avatars.githubusercontent.com/u/139496729?v=4" /></center> | <center><img width="150px" src="https://avatars.githubusercontent.com/u/53496113?v=4" /></center> | 
+| <center> <img width="150px" src="https://avatars.githubusercontent.com/u/128278212?v=4" /></center> | <center><img width="150px" src="https://avatars.githubusercontent.com/u/139496729?v=4" /></center> | <center><img width="150px" src="https://avatars.githubusercontent.com/u/90364636?v=4" /></center> | 
 | <center> 작품 소개 </center> | <center> 챗봇 </center> | <center> 챗봇 </center> |
 | [@7beunseo](https://github.com/7beunseo)  | [@heeone1](https://github.com/heeone1) |  [@soyyyy](https://github.com/soyyyy) |
 
