@@ -63,7 +63,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-	'http://localhost:3000',
+	'http://localhost:5173',
 ]
 
 KAKAO_API_ACCESS_TOKEN = '955e62967ad2707fba06bbe354bcd257'
