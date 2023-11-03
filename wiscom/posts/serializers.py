@@ -24,17 +24,28 @@ class PostCreateSerializer(serializers.ModelSerializer):
         fields = ['title','content','tags']
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+        
+
 class CommentListSerializer(serializers.ModelSerializer):
     comment_tags = serializers.StringRelatedField(many=True)
     created_at = serializers.SerializerMethodField()
 
     def get_created_at(self, obj):
         return obj.created_at.strftime("%Y-%m-%d")
-    
+
     class Meta:
         model = Comment
-        exclude = ['post']
+        fields = '__all__'
 
+
+
+        
+        
 
 class PostRetreiveSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
@@ -70,7 +81,10 @@ class DeveloperSerializer(serializers.ModelSerializer):
 
 class CommentCreateUpdateSerializer(serializers.ModelSerializer):
     comment_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=CommentTag.objects.all())
+    
 
     class Meta:
         model = Comment
         fields = ['content', 'comment_tags']
+
+    

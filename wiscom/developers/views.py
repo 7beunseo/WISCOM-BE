@@ -3,6 +3,7 @@ from .models import Developer
 from .serializers import DeveloperSerializer
 
 class DeveloperListCreateView(generics.ListCreateAPIView):
+    print("in")
     queryset = Developer.objects.all()
     serializer_class = DeveloperSerializer
     pagination_class=None

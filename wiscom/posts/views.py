@@ -44,16 +44,18 @@ class PostModelViewSet(ModelViewSet):
     
 
 class CommentModelViewSet(ModelViewSet):
-    queryset = Comment.objects.all()
+    serializer_class = CommentListSerializer
+
+    def get_queryset(self):
+        post_pk = self.kwargs['post_pk']  # URL 매개변수에서 post_pk 가져오기
+        return Comment.objects.filter(post=post_pk)
     
     def get_serializer_class(self):
         if self.request.method in ['GET', 'RETRIEVE']:
             return CommentListSerializer
         else:
             return CommentCreateUpdateSerializer
-        
-    def list(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
     def create(self, request,post_pk, *args, **kwargs):
         post_pk = Post.objects.get(id=post_pk)
@@ -70,9 +72,13 @@ class CommentModelViewSet(ModelViewSet):
 
         total_tags = comment_tags+existing_hashtags
         set_total_tags = set(total_tags)
+        print("TOTAL : "+total_tags)
+        print("TOTAL : "+total_tags)
+        
 
         for hashtag in set_total_tags:
             hashtag_count = total_tags.count(hashtag)
+            print("hashtag_count : "+hashtag+" :"+hashtag_count)
             if hashtag_count >= 3:
                 hashtag_object, created = Tag.objects.get_or_create(name=hashtag, category='comments')  # 태그의 객체를 생성한 후 넣어야 한다 
                 post_pk.tags.add(hashtag_object)
@@ -90,16 +96,16 @@ class PostLikeAPIView(GenericAPIView):
         liked_key = 'liked_post_{}'.format(id)
 
         if request.session.get(liked_key, False):
-            return Response({"message": "이미 좋아요를 눌렀습니다."}, status=200)
+            return Response({"message": "이미 좋아요를 눌렀습니다.","likes": self.get_object().likes}, status=200)
 
         try:
             post = self.get_object()
         except Post.DoesNotExist:
-            return Response({"error": "해당하는 게시물이 존재하지 않습니다."}, status=400)
+            return Response({"error": "해당하는 게시물이 존재하지 않습니다.","likes": self.get_object().likes}, status=400)
 
         request.session[liked_key] = True
 
         Like.objects.create(post=post, ip=request.META.get('REMOTE_ADDR'))
         post.likes += 1
         post.save()
-        return Response({"message": "좋아요가 추가되었습니다."}, status=400)
+        return Response({"message": "좋아요가 추가되었습니다.","likes": self.get_object().likes}, status=400)
