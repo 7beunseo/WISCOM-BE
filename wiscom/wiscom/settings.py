@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 3
+    'PAGE_SIZE': 6
 }
 
 # Application definition
@@ -141,7 +141,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR/'static')
 STATICFILES_DIRS = []
-DEBUG = False
+DEBUG = True
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR/'media')
