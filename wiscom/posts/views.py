@@ -8,12 +8,6 @@ from django.http import HttpRequest
 from .serializers import PostListSerializer, PostCreateSerializer, CommentListSerializer, PostRetreiveSerializer, CommentCreateUpdateSerializer
 from .models import Post,Comment, Like, Tag
 
-def get_client_ip(request: HttpRequest) -> str:
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip_list = x_forwarded_for.split(',')
-        return ip_list[0].strip()
-    return request.META.get('REMOTE_ADDR')
 
 class PostModelViewSet(ModelViewSet):
     pagination_class=None
@@ -72,15 +66,11 @@ class CommentModelViewSet(ModelViewSet):
 
         total_tags = comment_tags+existing_hashtags
         set_total_tags = set(total_tags)
-        print("TOTAL : "+total_tags)
-        print("TOTAL : "+total_tags)
-        
 
         for hashtag in set_total_tags:
             hashtag_count = total_tags.count(hashtag)
-            print("hashtag_count : "+hashtag+" :"+hashtag_count)
             if hashtag_count >= 3:
-                hashtag_object, created = Tag.objects.get_or_create(name=hashtag, category='comments')  # 태그의 객체를 생성한 후 넣어야 한다 
+                hashtag_object, created = Tag.objects.get_or_create(name=hashtag, category='comments')  # 태그의 객체를 생성한 후 넣어야 함 
                 post_pk.tags.add(hashtag_object)
             
         self.perform_create(serializer)
