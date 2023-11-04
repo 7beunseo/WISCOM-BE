@@ -1,5 +1,9 @@
+from collections import OrderedDict
+
 from django.shortcuts import render
 from rest_framework import generics, viewsets
+from rest_framework.response import Response
+
 from .serializers import CommentSerializer
 from .models import Guest
 from rest_framework.pagination import PageNumberPagination
@@ -14,6 +18,8 @@ class GuestListCreateView(generics.ListCreateAPIView):
 class GuestViewSet(viewsets.ModelViewSet):
     queryset = Guest.objects.all()
     serializer_class=CommentSerializer
+    def get_queryset(self):
+        return Guest.objects.all().order_by('-id')
 
 class PostPageNumberPagination(PageNumberPagination):
     page_size = 6

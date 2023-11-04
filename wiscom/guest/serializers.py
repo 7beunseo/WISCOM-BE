@@ -9,7 +9,8 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest
         # fields = ('name', 'comment')
-        fields = ['id','content', 'created_at']
+        fields = ['name','content', 'created_at']
+        ordering = ['-id']
 
     def get_created_at(self, obj):
         return datetime.now().strftime("%Y-%m-%d")
