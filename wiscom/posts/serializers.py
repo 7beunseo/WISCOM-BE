@@ -2,6 +2,7 @@ from django.conf import settings
 from rest_framework import serializers
 from .models import Post, Comment, CommentTag
 from developers.models import Developer
+from datetime import timedelta
 
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -28,7 +29,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-
         
 
 class CommentListSerializer(serializers.ModelSerializer):
@@ -36,15 +36,13 @@ class CommentListSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
 
     def get_created_at(self, obj):
-        return obj.created_at.strftime("%Y-%m-%d")
-
+        original_time = obj.created_at
+        new_time = original_time + timedelta(hours=9)
+        return new_time.strftime("%Y-%m-%d")
+    
     class Meta:
         model = Comment
-        fields = '__all__'
-
-
-
-        
+        fields = '__all__'        
         
 
 class PostRetreiveSerializer(serializers.ModelSerializer):
@@ -82,9 +80,8 @@ class DeveloperSerializer(serializers.ModelSerializer):
 class CommentCreateUpdateSerializer(serializers.ModelSerializer):
     comment_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=CommentTag.objects.all())
     
-
     class Meta:
         model = Comment
-        fields = ['content', 'comment_tags']
+        fields = ['name', 'content', 'comment_tags']
 
     

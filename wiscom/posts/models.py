@@ -41,6 +41,8 @@ class Photo(models.Model):
     image = models.ImageField('IMAGE', upload_to=post_image_upload_path)
     
 class Comment(models.Model):
+    name = models.CharField(max_length=100, null=True)
+
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     comment_tags = models.ManyToManyField(CommentTag, blank=True)
     content = models.TextField('CONTENT')
