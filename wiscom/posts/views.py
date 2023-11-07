@@ -38,6 +38,7 @@ class PostModelViewSet(ModelViewSet):
     
 
 class CommentModelViewSet(ModelViewSet):
+    pagination_class=None
     serializer_class = CommentListSerializer
 
     def get_queryset(self):
