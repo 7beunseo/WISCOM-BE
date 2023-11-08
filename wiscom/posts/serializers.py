@@ -75,7 +75,7 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
 class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
-        fields = ['name', 'image','impression']
+        fields = ['name', 'image','impression', 'team_impression']
 
 class CommentCreateUpdateSerializer(serializers.ModelSerializer):
     comment_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=CommentTag.objects.all())
