@@ -6,7 +6,6 @@ class Developer(models.Model):
     name = models.CharField(max_length=10)
     image = models.ImageField(upload_to='developer_image')
     impression=models.TextField('IMPRESSION', blank=True, null=True)
-    team_impression=models.TextField(blank=True, null=True)
     
 
     def __str__(self):

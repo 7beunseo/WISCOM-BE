@@ -29,8 +29,9 @@ class Post(models.Model):
     team = models.CharField('TEAM', max_length=50)
     content = models.TextField('CONTENT')
     likes = models.IntegerField('LIKE', default=0)
-    logo = models.ImageField('LOGO', upload_to='logo')
-    service_url = models.URLField('SERVICE_URL', max_length=200)
+    logo = models.ImageField('LOGO', upload_to='logo',blank=True, null=True)
+    service_url = models.URLField('SERVICE_URL', max_length=200,blank=True, null=True)
+    team_impression=models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title

@@ -54,7 +54,7 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'team', 'images', 'content', 'comments', 'tags', 'likes', 'logo', 'service_url', 'developer']
+        fields = ['id', 'title', 'team', 'team_impression','images', 'content', 'comments', 'tags', 'likes', 'logo', 'service_url', 'developer']
 
     def get_developer(self, post):
         number = post.id
@@ -75,7 +75,7 @@ class PostRetreiveSerializer(serializers.ModelSerializer):
 class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
-        fields = ['name', 'image','impression', 'team_impression']
+        fields = ['name', 'image','impression']
 
 class CommentCreateUpdateSerializer(serializers.ModelSerializer):
     comment_tags = serializers.PrimaryKeyRelatedField(many=True, queryset=CommentTag.objects.all())
