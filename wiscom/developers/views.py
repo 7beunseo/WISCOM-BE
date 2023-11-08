@@ -8,6 +8,9 @@ class DeveloperListCreateView(generics.ListCreateAPIView):
     serializer_class = DeveloperSerializer
     pagination_class=None
 
+    def get_queryset(self):
+        return Developer.objects.all().order_by('post_number')
+
     def get_serializer_context(self):
         return {
             'request': None, #None으로 수정 
