@@ -49,6 +49,9 @@ class Comment(models.Model):
     content = models.TextField('CONTENT')
     created_at = models.DateTimeField('CREATED_AT', auto_now_add=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
         return self.content
 
