@@ -100,4 +100,10 @@ class PostLikeAPIView(GenericAPIView):
         Like.objects.create(post=post, ip=request.META.get('REMOTE_ADDR'))
         post.likes += 1
         post.save()
-        return Response({"message": "좋아요가 추가되었습니다.","likes": self.get_object().likes}, status=400)
+        return Response({"message": "좋아요가 추가되었습니다.","likes": self.get_object().likes}, status=200)
+
+class PostLikeShowAPIView(GenericAPIView):
+    queryset = Post.objects.all()
+    lookup_field = 'id' 
+    def get(self, request, id, *args, **kwargs):
+        return Response({"likes": self.get_object().likes}, status=200)

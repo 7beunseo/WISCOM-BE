@@ -10,7 +10,8 @@ urlpatterns = [
     # 다른 URL 패턴들...
 ]
 urlpatterns+=[
-    path('posts/<int:id>/like/', PostLikeAPIView.as_view(), name='like_post'),
+    path('posts/<int:id>/like/', PostLikeShowAPIView.as_view(), name='like_post'),
+    path('posts/<int:id>/like/add/', PostLikeAPIView.as_view())
 ]
 # 중첩된 라우팅을 수행
 post_router = DefaultRouter()
