@@ -106,4 +106,7 @@ class PostLikeShowAPIView(GenericAPIView):
     queryset = Post.objects.all()
     lookup_field = 'id' 
     def get(self, request, id, *args, **kwargs):
-        return Response({"likes": self.get_object().likes}, status=200)
+        liked_key = 'liked_post_{}'.format(id)
+        if request.session.get(liked_key, False):
+            return Response({"message": "좋아요를 누름", "likes": self.get_object().likes}, status=200)
+        return Response({"message": "좋아요를 누르지 않음", "likes": self.get_object().likes}, status=200)
