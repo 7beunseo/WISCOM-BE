@@ -41,9 +41,10 @@ class CommentModelViewSet(ModelViewSet):
     pagination_class=None
     serializer_class = CommentListSerializer
 
+
     def get_queryset(self):
         post_pk = self.kwargs['post_pk']  # URL 매개변수에서 post_pk 가져오기
-        return Comment.objects.filter(post=post_pk)
+        return Comment.objects.filter(post=post_pk).order_by('-id')
     
     def get_serializer_class(self):
         if self.request.method in ['GET', 'RETRIEVE']:
