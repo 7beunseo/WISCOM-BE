@@ -70,8 +70,8 @@ CORS_ALLOWED_ORIGINS = [
 	'http://localhost:5173',
 ]
 
-KAKAO_API_ACCESS_TOKEN = '955e62967ad2707fba06bbe354bcd257'
-KAKAO_CHAT_ROOM_ID = '_xmkSuG'
+KAKAO_API_ACCESS_TOKEN = 'd3e7a3b6ea15f0e2602a6c04fc12b305'
+KAKAO_CHAT_ROOM_ID = '_wymuG'
 
 ROOT_URLCONF = 'wiscom.urls'
 
@@ -145,7 +145,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR/'static')
 STATICFILES_DIRS = []
-DEBUG = False
+DEBUG = True
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR/'media')
